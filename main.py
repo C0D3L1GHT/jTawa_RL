@@ -7,10 +7,10 @@ from entity import Entity
 from procgen import generate_dungeon
 
 def main() -> None:
-    screen_width          = 100
-    screen_height         = 80
-    map_width             = 90
-    map_height            = 75
+    screen_width          = 80
+    screen_height         = 50
+    map_width             = 80
+    map_height            = 45
     room_max_size         = 10
     room_min_size         = 6
     max_rooms             = 30
@@ -21,7 +21,7 @@ def main() -> None:
                                           )
     player = copy.deepcopy(entity_factories.player)
     engine  = Engine(player=player)
-    
+
     engine.game_map = generate_dungeon(
         max_rooms=max_rooms,
         room_min_size=room_min_size,
@@ -33,7 +33,7 @@ def main() -> None:
     )
 
     engine.update_fov()
-    
+
     with tcod.context.new_terminal(
         screen_width,
         screen_height,
