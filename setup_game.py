@@ -11,6 +11,7 @@ import color
 from engine import Engine
 import entity_factories
 from game_map import GameWorld
+from tcod import libtcodpy
 import input_handlers
 
 
@@ -39,11 +40,13 @@ def new_game() -> Engine:
         map_width=map_width,
         map_height=map_height,
     )
-    engine.game_world.generate_floor()
+    engine.game_world.generate_island()
+    # this generates a dungeon floor
+    # engine.game_world.generate_floor()
     engine.update_fov()
 
     engine.message_log.add_message(
-        "Hello and welcome, adventurer, to yet another dungeon!", color.welcome_text
+        "toki a, jan Tawa o, tomo utala sin li kama", color.welcome_text
     )
 
     dagger = copy.deepcopy(entity_factories.dagger)
@@ -79,19 +82,19 @@ class MainMenu(input_handlers.BaseEventHandler):
             console.height // 2 - 4,
             "MUSI JAN TAWA",
             fg=color.menu_title,
-            alignment=tcod.CENTER,
+            alignment=libtcodpy.CENTER,
         )
         console.print(
             console.width // 2,
             console.height - 2,
             "tan jan Kosin",
             fg=color.menu_title,
-            alignment=tcod.CENTER,
+            alignment=libtcodpy.CENTER,
         )
 
         menu_width = 24
         for i, text in enumerate(
-            ["[N] Play a new game", "[C] Continue last game", "[Q] Quit"]
+            ["[N] o open e musi sin", "[C] o awen e musi", "[Q] o weka"]
         ):
             console.print(
                 console.width // 2,
@@ -99,23 +102,23 @@ class MainMenu(input_handlers.BaseEventHandler):
                 text.ljust(menu_width),
                 fg=color.menu_text,
                 bg=color.black,
-                alignment=tcod.CENTER,
-                bg_blend=tcod.BKGND_ALPHA(64),
+                alignment=libtcodpy.CENTER,
+                bg_blend=libtcodpy.BKGND_ALPHA(64),
             )
 
     def ev_keydown(
         self, event: tcod.event.KeyDown
     ) -> Optional[input_handlers.BaseEventHandler]:
-        if event.sym in (tcod.event.K_q, tcod.event.K_ESCAPE):
+        if event.sym in (tcod.event.KeySym.q, tcod.event.KeySym.ESCAPE):
             raise SystemExit()
         elif event.sym == tcod.event.K_c:
             try:
                 return input_handlers.MainGameEventHandler(load_game("savegame.sav"))
             except FileNotFoundError:
-                return input_handlers.PopupMessage(self, "No saved game to load.")
+                return input_handlers.PopupMessage(self, "musi awen li lon ala")
             except Exception as exc:
                 traceback.print_exc()  # Print to stderr.
-                return input_handlers.PopupMessage(self, f"Failed to load save:\n{exc}")
+                return input_handlers.PopupMessage(self, f"mi ken ala kama e musi awen:\n{exc}")
         elif event.sym == tcod.event.K_n:
             return input_handlers.MainGameEventHandler(new_game())
 

@@ -53,8 +53,8 @@ WAIT_KEYS = {
 }
 
 CONFIRM_KEYS = {
-    tcod.event.K_RETURN,
-    tcod.event.K_KP_ENTER,
+    tcod.event.KeySym.RETURN,
+    tcod.event.KeySym.KP_ENTER,
 }
 
 ActionOrHandler = Union[Action, "BaseEventHandler"]
@@ -108,10 +108,10 @@ class PopupMessage(BaseEventHandler):
         return self.parent
 
 CURSOR_Y_KEYS = {
-    tcod.event.K_UP: -1,
-    tcod.event.K_DOWN: 1,
-    tcod.event.K_PAGEUP: -10,
-    tcod.event.K_PAGEDOWN: 10,
+    tcod.event.KeySym.UP: -1,
+    tcod.event.KeySym.DOWN: 1,
+    tcod.event.KeySym.PAGEUP: -10,
+    tcod.event.KeySym.PAGEDOWN: 10,
 }
 
 class EventHandler(BaseEventHandler):
@@ -190,7 +190,7 @@ class AskUserEventHandler(EventHandler):
         return MainGameEventHandler(self.engine)
 
 class CharacterScreenEventHandler(AskUserEventHandler):
-    TITLE = "Character Information"
+    TITLE = "nanpa pi jan Tawa"
 
     def on_render(self, console: tcod.Console) -> None:
         super().on_render(console)
@@ -216,26 +216,26 @@ class CharacterScreenEventHandler(AskUserEventHandler):
         )
 
         console.print(
-            x=x + 1, y=y + 1, string=f"Level: {self.engine.player.level.current_level}"
+            x=x + 1, y=y + 1, string=f"nanpa wawa: {self.engine.player.level.current_level}"
         )
         console.print(
-            x=x + 1, y=y + 2, string=f"XP: {self.engine.player.level.current_xp}"
+            x=x + 1, y=y + 2, string=f"ko wawa: {self.engine.player.level.current_xp}"
         )
         console.print(
             x=x + 1,
             y=y + 3,
-            string=f"XP for next Level: {self.engine.player.level.experience_to_next_level}",
+            string=f"nanpa wawa sin la sin wile e ko nanpa: {self.engine.player.level.experience_to_next_level}",
         )
 
         console.print(
-            x=x + 1, y=y + 4, string=f"Attack: {self.engine.player.fighter.power}"
+            x=x + 1, y=y + 4, string=f"ken utala: {self.engine.player.fighter.power}"
         )
         console.print(
-            x=x + 1, y=y + 5, string=f"Defense: {self.engine.player.fighter.defense}"
+            x=x + 1, y=y + 5, string=f"ken awen: {self.engine.player.fighter.defense}"
         )
 
 class LevelUpEventHandler(AskUserEventHandler):
-    TITLE = "Level Up"
+    TITLE = "kama wawa"
 
     def on_render(self, console: tcod.Console) -> None:
         super().on_render(console)
@@ -256,23 +256,23 @@ class LevelUpEventHandler(AskUserEventHandler):
             bg=(0, 0, 0),
         )
 
-        console.print(x=x + 1, y=1, string="Congratulations! You level up!")
-        console.print(x=x + 1, y=2, string="Select an attribute to increase.")
+        console.print(x=x + 1, y=1, string="wawa! sina kama wawa")
+        console.print(x=x + 1, y=2, string="o luka e nena")
 
         console.print(
             x=x + 1,
             y=4,
-            string=f"a) Constitution (+20 HP, from {self.engine.player.fighter.max_hp})",
+            string=f"a) #sjlo sewi (+20 #sjlo, tan {self.engine.player.fighter.max_hp})",
         )
         console.print(
             x=x + 1,
             y=5,
-            string=f"b) Strength (+1 attack, from {self.engine.player.fighter.power})",
+            string=f"b) ken wawa (+1 ken utala, tan {self.engine.player.fighter.power})",
         )
         console.print(
             x=x + 1,
             y=6,
-            string=f"c) Agility (+1 defense, from {self.engine.player.fighter.defense})",
+            string=f"c) ken tawa (+1 ken awen, tan {self.engine.player.fighter.defense})",
         )
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[ActionOrHandler]:
@@ -378,7 +378,7 @@ class InventoryEventHandler(AskUserEventHandler):
 class InventoryActivateHandler(InventoryEventHandler):
     """Handle using an inventory item."""
 
-    TITLE = "Select an item to use"
+    TITLE = "------ijo en ilo------"
 
     def on_item_selected(self, item: Item) -> Optional[ActionOrHandler]:
         if item.consumable:

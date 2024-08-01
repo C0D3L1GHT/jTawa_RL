@@ -42,16 +42,16 @@ class PickupAction(Action):
         for item in self.engine.game_map.items:
             if actor_location_x == item.x and actor_location_y == item.y:
                 if len(inventory.items) >= inventory.capacity:
-                    raise exceptions.Impossible("Your inventory is full.")
+                    raise exceptions.Impossible("ijo sin la poki sina li ken ala jo e ni")
 
                 self.engine.game_map.entities.remove(item)
                 item.parent = self.entity.inventory
                 inventory.items.append(item)
 
-                self.engine.message_log.add_message(f"You picked up the {item.name}!")
+                self.engine.message_log.add_message(f"sina kama jo e {item.name}!")
                 return
 
-        raise exceptions.Impossible("There is nothing here to pick up.")
+        raise exceptions.Impossible("ijo jo la ni li lon ala")
 
 class ItemAction(Action):
     def __init__(
@@ -100,10 +100,10 @@ class TakeStairsAction(Action):
         if (self.entity.x, self.entity.y) == self.engine.game_map.downstairs_location:
             self.engine.game_world.generate_floor()
             self.engine.message_log.add_message(
-                "You descend the staircase.", color.descend
+                "sina tawa lon anpa", color.descend
             )
         else:
-            raise exceptions.Impossible("There are no stairs here.")
+            raise exceptions.Impossible("lupa anpa li lon ala")
 
 class ActionWithDirection(Action):
     def __init__(self, entity: Actor, dx: int, dy: int):
@@ -135,18 +135,18 @@ class MeleeAction(ActionWithDirection):
         target = self.target_actor
 
         if not target:
-            raise exceptions.Impossible("Nothing to attack.")
+            raise exceptions.Impossible("ijo utala li lon ala")
 
         damage = self.entity.fighter.power - target.fighter.defense
 
-        attack_desc = f"{self.entity.name.capitalize()} attacks {target.name}"
+        attack_desc = f"{self.entity.name.capitalize()} li utala e {target.name}"
         if self.entity is self.engine.player:
             attack_color = color.player_atk
         else:
             attack_color = color.enemy_atk
 
         if damage > 0:
-            self.engine.message_log.add_message(f"{attack_desc} nanpa {damage} poki sijelo li weka.")
+            self.engine.message_log.add_message(f"{attack_desc}. sina weka e sijelo nanpa {damage}")
             target.fighter.hp -= damage
         else:
             self.engine.message_log.add_message(f"{attack_desc} taso utala ni li pakala ala e ona.")
@@ -157,13 +157,13 @@ class MovementAction(ActionWithDirection):
 
         if not self.engine.game_map.in_bounds(dest_x, dest_y):
             # Destination is out of bounds.
-            raise exceptions.Impossible("That way is blocked.")
+            raise exceptions.Impossible("sina ken ala tawa kepeken nasin ni")
         if not self.engine.game_map.tiles["walkable"][dest_x, dest_y]:
             # Destination is blocked by a tile.
-            raise exceptions.Impossible("That way is blocked.")
+            raise exceptions.Impossible("sina ken ala tawa kepeken nasin ni")
         if self.engine.game_map.get_blocking_entity_at_location(dest_x, dest_y):
             # Destination is blocked by an entity.
-            raise exceptions.Impossible("That way is blocked.")
+            raise exceptions.Impossible("sina ken ala tawa kepeken nasin ni")
 
         self.entity.move(self.dx, self.dy)
 

@@ -177,7 +177,7 @@ def generate_dungeon(
 
         if len(rooms) == 0:
             # The first room, where the player starts.
-            player.place(*new_room.center, dungeon)
+            player.place(*new_room.center, village)
         else:  # All rooms after the first.
             # Dig out a tunnel between this room and the previous one.
             for x, y in tunnel_between(rooms[-1].center, new_room.center):
@@ -193,3 +193,37 @@ def generate_dungeon(
         rooms.append(new_room)
 
     return dungeon
+
+def generate_village(
+    max_rooms: int,
+    room_min_size: int,
+    room_max_size: int,
+    map_width: int,
+    map_height: int,
+    engine: Engine,
+) -> GameMap:
+    """Generate a new overworld village"""
+    player = engine.player
+    village = GameMap(engine, map_width, map_height, entities=[player])
+
+    """Lay out the whole map with floor"""
+    room_width  =  map_width-1  #random.randint(room_min_size, room_max_size)
+    room_height = map_height-1 #random.randint(room_min_size, room_max_size)
+
+    x = random.randint(0, village.width - room_width - 1)
+    y = random.randint(0, village.height - room_height - 1)
+
+    # "RectangularRoom" class makes rectangles easier to work with
+    new_room = RectangularRoom(x, y, room_width, room_height)
+
+    # Dig out this rooms inner area.
+    village.tiles[new_room.inner] = tile_types.floor
+
+    player.place(*new_room.center, village)
+    """Add room rectangles"""
+
+    """Give rooms doors"""
+
+    """Add dungeon entrance"""
+
+    return village

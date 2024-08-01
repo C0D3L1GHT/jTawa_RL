@@ -65,7 +65,7 @@ class ConfusionConsumable(Consumable):
             raise Impossible("You cannot confuse yourself!")
 
         self.engine.message_log.add_message(
-            f"The eyes of the {target.name} look vacant, as it starts to stumble around!",
+            f"{target.name} li pilin nasa mute a!",
             color.status_effect_applied,
         )
         target.ai = components.ai.ConfusedEnemy(
@@ -83,12 +83,12 @@ class HealingConsumable(Consumable):
 
         if amount_recovered > 0:
             self.engine.message_log.add_message(
-                f"You consume the {self.parent.name}, and recover {amount_recovered} HP!",
+                f"sina moku e {self.parent.name}. sina kama sin {amount_recovered} #sijelo!",
                 color.health_recovered,
             )
             self.consume()
         else:
-            raise Impossible(f"Your health is already full.")
+            raise Impossible(f"sina wile moku ala e ni")
 
 class FireballDamageConsumable(Consumable):
     def __init__(self, damage: int, radius: int):
