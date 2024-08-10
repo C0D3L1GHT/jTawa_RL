@@ -88,6 +88,16 @@ class EquipAction(Action):
     def perform(self) -> None:
         self.entity.equipment.toggle_equip(self.item)
 
+class BarkAction(Action):
+    #TODO: This should print a bark as a box above the entities head
+    def __init__(self, entity: Actor, bark: str):
+      pass 
+
+    def perform(self) -> None:
+        """
+        Bark a random phrase from a given list
+        """
+
 class WaitAction(Action):
     def perform(self) -> None:
         pass

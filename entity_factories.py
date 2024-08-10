@@ -1,4 +1,5 @@
 from components.ai import HostileEnemy
+from components.ai import Barker
 from components import consumable, equippable
 from components.equipment import Equipment
 from components.fighter import Fighter
@@ -21,6 +22,16 @@ player = Actor(
 # an Elder who gives quests,
 # a Trader who gives items,
 # a Farmer who just barks
+farmer = Actor(
+    char="i",
+    color=(39, 217, 98),
+    name="jan kili",
+    ai_cls=Barker,
+    equipment=Equipment(),
+    fighter=Fighter(hp=1, base_defense=0, base_power=0),
+    inventory=Inventory(capacity=0),
+    level=Level(xp_given=0),
+)
 
 orc = Actor(
     char="o",

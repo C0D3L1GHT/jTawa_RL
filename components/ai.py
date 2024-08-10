@@ -111,3 +111,22 @@ class HostileEnemy(BaseAI):
             ).perform()
 
         return WaitAction(self.entity).perform()
+
+class Barker(BaseAI):
+    def __init__(self, entity: Actor):
+        super().__init__(entity)
+        self.path: List[Tuple[int, int]] = []
+
+    def perform(self) -> None:
+        target = self.engine.player
+        dx = target.x - self.entity.x
+        dy = target.y - self.entity.y
+        distance = max(abs(dx), abs(dy))  # Chebyshev distance.
+
+        if self.engine.game_map.visible[self.entity.x, self.entity.y]:
+            if distance <= 1:
+                # BarkAction takes a string and prints it above the NPC's head until the user does an input 
+                # TODO: change to BarkAction("pona tawa sina").perform()
+                return MeleeAction(self.entity, dx, dy).perform()
+
+        return WaitAction(self.entity).perform()

@@ -21,6 +21,10 @@ max_monsters_by_floor = [
     (6, 5),
 ]
 
+villager_chances: Dict[int, List[Tuple[Entity, int]]] = {
+    0: [(entity_factories.farmer, 100)],
+}
+
 item_chances: Dict[int, List[Tuple[Entity, int]]] = {
     0: [(entity_factories.health_potion, 35)],
     2: [(entity_factories.confusion_scroll, 10)],
@@ -53,6 +57,9 @@ def get_entities_at_random(
     number_of_entities: int,
     floor: int,
 ) -> List[Entity]:
+    """
+    Populates the dungeon with enemies, or villages with villagers
+    """
     entity_weighted_chances = {}
 
     for key, values in weighted_chances_by_floor.items():
@@ -103,25 +110,38 @@ class RectangularRoom:
         )
 
 def place_entities(room: RectangularRoom, dungeon: GameMap, floor_number: int,) -> None:
+    number_of_villagers = random.randint(0, 10)
     number_of_monsters = random.randint(
         0, get_max_value_for_floor(max_monsters_by_floor, floor_number)
     )
     number_of_items = random.randint(
         0, get_max_value_for_floor(max_items_by_floor, floor_number)
     )
-
+    villagers: List[Entity] = get_entities_at_random(
+        villager_chances, number_of_villagers, 0
+    )
     monsters: List[Entity] = get_entities_at_random(
         enemy_chances, number_of_monsters, floor_number
     )
     items: List[Entity] = get_entities_at_random(
         item_chances, number_of_items, floor_number
     )
-    for entity in monsters + items:
-        x = random.randint(room.x1 + 1, room.x2 - 1)
-        y = random.randint(room.y1 + 1, room.y2 - 1)
 
-        if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
-            entity.spawn(dungeon, x, y)
+    if floor_number == 0:
+        for entity in villagers:
+            x = random.randint(room.x1 + 1, room.x2 - 1)
+            y = random.randint(room.y1 + 1, room.y2 - 1)
+
+            if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
+                entity.spawn(dungeon, x, y)
+
+    if floor_number > 0:
+        for entity in monsters + items:
+            x = random.randint(room.x1 + 1, room.x2 - 1)
+            y = random.randint(room.y1 + 1, room.y2 - 1)
+
+            if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
+                entity.spawn(dungeon, x, y)
 
 def tunnel_between(
     start: Tuple[int, int], end: Tuple[int, int]
@@ -220,6 +240,7 @@ def generate_village(
     village.tiles[new_room.inner] = tile_types.floor
 
     player.place(*new_room.center, village)
+    place_entities(new_room, village, engine.game_world.current_floor)
     """Add room rectangles"""
 
     """Give rooms doors"""
