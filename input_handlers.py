@@ -4,6 +4,7 @@ from typing import Callable, Optional, Tuple, TYPE_CHECKING, Union
 import actions
 from actions import (
     Action,
+    BarkAction,
     BumpAction,
     PickupAction,
     WaitAction

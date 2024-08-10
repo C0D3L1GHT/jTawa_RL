@@ -6,7 +6,7 @@ import random
 import numpy as np  # type: ignore
 import tcod
 
-from actions import Action, BumpAction, MeleeAction, MovementAction, WaitAction
+from actions import Action, BarkAction, BumpAction, MeleeAction, MovementAction, WaitAction
 
 if TYPE_CHECKING:
     from entity import Actor
@@ -127,6 +127,6 @@ class Barker(BaseAI):
             if distance <= 1:
                 # BarkAction takes a string and prints it above the NPC's head until the user does an input 
                 # TODO: change to BarkAction("pona tawa sina").perform()
-                return MeleeAction(self.entity, dx, dy).perform()
+                return BarkAction(self.entity).perform()
 
         return WaitAction(self.entity).perform()

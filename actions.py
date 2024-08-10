@@ -90,13 +90,13 @@ class EquipAction(Action):
 
 class BarkAction(Action):
     #TODO: This should print a bark as a box above the entities head
-    def __init__(self, entity: Actor, bark: str):
-      pass 
-
     def perform(self) -> None:
         """
-        Bark a random phrase from a given list
+        Bark a given phrase
         """
+        self.engine.message_log.add_message(
+            "toki", color.welcome_text
+        )
 
 class WaitAction(Action):
     def perform(self) -> None:
